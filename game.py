@@ -22,7 +22,7 @@ class Game:
         self.blt.color("white")
 
         logger.info("Terminal started")
-
+        self.themes.intro_loop()
         self.game_loop()
 
     def game_loop(self):
