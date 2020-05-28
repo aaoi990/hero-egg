@@ -23,19 +23,19 @@ class Thematics:
                      "He lived for adventure.\n\n"
                      "1. Go on an [c=orange]egg[/c]venture.\n"
                      "2. Load an [c=orange]egg[/c]venture.\n"
-                     "3. See high scores.")
+                     "3. See high scores.\n"
+                     "4. Quit")
 
         self.blt.puts(60, 5, intro_txt, align=self.blt.TK_ALIGN_CENTER)
 
         while True:
             self.blt.refresh()
             key = self.blt.read()
-
             if key == self.blt.TK_ESCAPE:
+                self.blt.clear()
                 break
             elif key == self.blt.TK_1:
                 logger.info('Starting eggventure')
-                self.blt.clear()
                 break
             elif key == self.blt.TK_2:
                 logger.info('Loading eggventure')
@@ -43,6 +43,9 @@ class Thematics:
             elif key == self.blt.TK_3:
                 logger.info('Showing highscores')
                 self.blt.clear()
+            elif key == self.blt.TK_4:
+                logger.info('Terminating through menu')
+                return False
 
         self.blt.refresh()
-        # self.blt.clear()
+        return True
