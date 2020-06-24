@@ -3,6 +3,8 @@ import random
 from collections import namedtuple
 from bearlibterminal import terminal
 from thematics import Thematics
+from gui import Gui
+from map import Map
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -11,9 +13,11 @@ logger = logging.getLogger()
 class Game:
     def __init__(self):
         self.blt = terminal
+        self.game_w = 120
+        self.game_h = 40
         self.themes = Thematics(self.blt)
-        self.board_w = 80
-        self.board_h = 30
+        self.gui = Gui(self.game_w, self.game_h)
+        self.map = Map()
 
     def __del__(self):
         self.blt.close()
@@ -30,22 +34,10 @@ class Game:
         else:
             self.blt.close()
 
-    def draw_game_boarders(self):
-        logger.info('Drawing game board edges')
-        for x in range(self.board_w):
-            self.blt.put(x, 0, 'x' if x % 2 else '#')
-            self.blt.put(x, self.board_h - 1, 'x' if x % 2 else '#')
-
-        for y in range(self.board_h):
-            self.blt.put(0, y, 'x' if y % 2 else '#')
-            self.blt.put(self.board_w - 1, y, 'x' if y % 2 else '#')
-
-        self.blt.refresh()
-
     def game_loop(self):
         self.blt.clear()
-        self.draw_game_boarders()
-
+        self.gui.draw_game_menu()
+        self.map.draw_map()
         logger.info("Game loop init")
         while True:
             key = self.blt.read()
