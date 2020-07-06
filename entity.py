@@ -1,11 +1,19 @@
-from typing import Tuple
+from __future__ import annotations
+import copy
+from typing import Tuple, TypeVar, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game_map import GameMap
+
+T = TypeVar("T"m bound="Entity")
 
 
 class Entity:
     """
     A generic object to represent players, enemies, items, etc.
     """
-    def __init__(self, x: int, y: int, max_hp : int, char: str, color: Tuple[int, int, int]):
+
+    def __init__(self, x: int, y: int, max_hp: int, char: str, color: Tuple[int, int, int]):
         self.x = x
         self.y = y
         self.max_hp = max_hp
