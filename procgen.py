@@ -64,11 +64,16 @@ def place_entities(
         y = random.randint(room.y1 + 1, room.y2 - 1)
 
         if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
-            entity_factories.health_potion.spawn(dungeon, x, y)
+            a = random.choices(
+                entity_factories.ConsumableItems, weights=[6, 3, 1])
+
+            a[0].spawn(dungeon, x, y)
 
 
 def tunnel_between(
     start: Tuple[int, int], end: Tuple[int, int]
+
+
 ) -> Iterator[Tuple[int, int]]:
     """Return an L-shaped tunnel between these two points."""
     x1, y1 = start
@@ -128,7 +133,8 @@ def generate_dungeon(
             for x, y in tunnel_between(rooms[-1].center, new_room.center):
                 dungeon.tiles[x, y] = tile_types.floor
 
-        place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room)
+        place_entities(new_room, dungeon, max_monsters_per_room,
+                       max_items_per_room)
 
         # Finally, append the new room to the list.
         rooms.append(new_room)

@@ -57,15 +57,18 @@ class PickupAction(Action):
 
                 if item_added:
                     self.engine.game_map.entities.remove(item)
-                    self.engine.message_log.add_message(f"You picked up the {item.name}!")
+                    self.engine.message_log.add_message(
+                        f"You picked up the {item.name}!")
 
                     return True
                 else:
-                    self.engine.message_log.add_message(f"Your inventory is full.")
+                    self.engine.message_log.add_message(
+                        f"Your inventory is full.")
 
                     return False
 
-        self.engine.message_log.add_message(f"There is nothing here to pick up.")
+        self.engine.message_log.add_message(
+            f"There is nothing here to pick up.")
 
         return False
 
@@ -92,25 +95,32 @@ class MenuSelectAction(Action):
                 self.entity.inventory.drop(selected_item, self.engine)
 
                 # Switch the event handler back to the main game, so the inventory menu closes.
-                self.engine.event_handler = MainGameEventHandler(engine=self.engine)
+                self.engine.event_handler = MainGameEventHandler(
+                    engine=self.engine)
 
                 # Dropping an item takes a turn.
                 return True
+
             elif selected_item.consumable:
                 # Try consuming the item. It's possible the item cannot be consumed.
-                item_consumed = selected_item.consumable.consume(self.entity, self.engine)
+                item_consumed = selected_item.consumable.consume(
+                    self.entity, self.engine)
 
                 if item_consumed:
                     # Remove the item from the inventory.
-                    self.entity.inventory.items.remove(selected_item)
+                    index = self.entity.inventory.items.index(selected_item)
+                    self.entity.inventory.items[index] = ''
 
                     # Switch the event handler back to the main game, so the inventory menu closes.
-                    self.engine.event_handler = MainGameEventHandler(engine=self.engine)
+                    self.engine.event_handler = MainGameEventHandler(
+                        engine=self.engine)
 
                     # Consuming an item takes a turn.
                     return True
-        except IndexError:
-            self.engine.message_log.add_message("Invalid entry.", (255, 255, 0))
+
+        except (IndexError, AttributeError):
+            self.engine.message_log.add_message(
+                "Invalid entry.", (255, 255, 0))
 
         # An item was not consumed, so don't make a turn pass.
         return False
@@ -126,7 +136,8 @@ class ShowInventoryAction(Action):
         from input_handlers import InventoryEventHandler
 
         # Set the event handler to the one that handles the inventory.
-        self.engine.event_handler = InventoryEventHandler(engine=self.engine, dropping=self.dropping)
+        self.engine.event_handler = InventoryEventHandler(
+            engine=self.engine, dropping=self.dropping)
 
         # Opening the menu does not consume a turn.
         return False
@@ -139,7 +150,8 @@ class EscapeAction(Action):
         if isinstance(self.engine.event_handler, InventoryEventHandler):
             from input_handlers import MainGameEventHandler
 
-            self.engine.event_handler = MainGameEventHandler(engine=self.engine)
+            self.engine.event_handler = MainGameEventHandler(
+                engine=self.engine)
         else:
             raise SystemExit()
 

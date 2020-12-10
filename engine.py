@@ -12,7 +12,7 @@ from entity import Actor
 from game_map import GameMap
 from input_handlers import InventoryEventHandler, MainGameEventHandler
 from message_log import MessageLog
-from render_functions import render_bar, render_inventory_menu, render_names_at_mouse_location
+from render_functions import render_bar, render_inventory_menu, render_names_at_mouse_location, render_menu
 
 if TYPE_CHECKING:
     from input_handlers import EventHandler
@@ -22,7 +22,7 @@ class Engine:
     def __init__(self, game_map: GameMap, player: Actor):
         self.event_handler: EventHandler = MainGameEventHandler(self)
         self.game_map = game_map
-        self.message_log = MessageLog(x=21, y=45, width=40, height=5)
+        self.message_log = MessageLog(x=21, y=45, width=60, height=4)
         self.mouse_location = (0, 0)
         self.player = player
         self.update_fov()
@@ -44,13 +44,18 @@ class Engine:
         self.game_map.visible[:] = compute_fov(
             self.game_map.tiles["transparent"],
             (self.player.x, self.player.y),
-            radius=8,
+            radius=5,
         )
         # If a tile is "visible" it should be added to "explored".
         self.game_map.explored |= self.game_map.visible
 
     def render(self, console: Console, context: Context) -> None:
         self.game_map.render(console)
+
+        render_menu(
+            console=console,
+            map_height=self.game_map.height,
+            menu_width=100)
 
         self.message_log.render(console=console)
 
@@ -60,12 +65,14 @@ class Engine:
 
         render_bar(
             console=console,
+            character=self.player,
             current_value=self.player.fighter.hp,
             maximum_value=self.player.fighter.max_hp,
             total_width=20
         )
 
-        render_names_at_mouse_location(console=console, x=21, y=44, engine=self)
+        render_names_at_mouse_location(
+            console=console, x=21, y=44, engine=self)
 
         context.present(console)
 

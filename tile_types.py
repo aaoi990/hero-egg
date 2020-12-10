@@ -40,7 +40,7 @@ floor = new_tile(
     walkable=True,
     transparent=True,
     dark=(ord(" "), (255, 255, 255), (0, 0, 0)),
-    light=(ord(" "), (255, 255, 255), (64, 64, 64)),
+    light=(ord(" "), (255, 255, 255), (50, 50, 50)),
 )
 wall = new_tile(
     walkable=False,

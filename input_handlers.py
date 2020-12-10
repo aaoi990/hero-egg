@@ -20,7 +20,8 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         raise NotImplementedError()
 
     def ev_mousemotion(self, event: tcod.event.MouseMotion) -> Optional[Action]:
-        action = MouseMotionAction(self.engine, self.engine.player, tile_x=event.tile.x, tile_y=event.tile.y)
+        action = MouseMotionAction(
+            self.engine, self.engine.player, tile_x=event.tile.x, tile_y=event.tile.y)
 
         return action
 
@@ -50,13 +51,16 @@ class InventoryEventHandler(EventHandler):
 
         key = event.sym
 
-        if key == tcod.event.K_ESCAPE:
-            action = EscapeAction(engine=self.engine, entity=self.engine.player)
+        if key == tcod.event.K_i:
+            action = EscapeAction(engine=self.engine,
+                                  entity=self.engine.player)
         else:
             index = key - ord("a")
+            print(index)
 
-            if 0 <= index <= 26:
-                action = MenuSelectAction(engine=self.engine, entity=self.engine.player, index=index)
+            if 0 <= index <= 15:
+                action = MenuSelectAction(
+                    engine=self.engine, entity=self.engine.player, index=index)
 
         return action
 
@@ -80,7 +84,8 @@ class MainGameEventHandler(EventHandler):
             if turn_passed:
                 self.engine.handle_enemy_turns()
 
-            self.engine.update_fov()  # Update the FOV before the players next action.
+            # Update the FOV before the players next action.
+            self.engine.update_fov()
 
     def ev_quit(self, event: tcod.event.Quit) -> Optional[Action]:
         raise SystemExit()
@@ -101,6 +106,7 @@ class MainGameEventHandler(EventHandler):
             action = BumpAction(*context, dx=-1, dy=0)
         elif key in (tcod.event.K_RIGHT, tcod.event.K_l):
             action = BumpAction(*context, dx=1, dy=0)
+
         elif key == tcod.event.K_y:
             action = BumpAction(*context, dx=-1, dy=-1)
         elif key == tcod.event.K_u:
@@ -109,6 +115,7 @@ class MainGameEventHandler(EventHandler):
             action = BumpAction(*context, dx=-1, dy=1)
         elif key == tcod.event.K_n:
             action = BumpAction(*context, dx=1, dy=1)
+
         elif key == tcod.event.K_PERIOD:
             action = WaitAction(*context)
 

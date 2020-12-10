@@ -9,7 +9,7 @@ from procgen import generate_dungeon
 
 
 def main() -> None:
-    screen_width = 80
+    screen_width = 100
     screen_height = 50
 
     map_width = 80
@@ -20,10 +20,10 @@ def main() -> None:
     max_rooms = 30
 
     max_monsters_per_room = 2
-    max_items_per_room = 2
+    max_items_per_room = 1
 
     tileset = tcod.tileset.load_tilesheet(
-        "arial10x10.png", 32, 8, tcod.tileset.CHARMAP_TCOD
+        "lucida12x12_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )
 
     player = copy.deepcopy(entity_factories.player)
@@ -41,13 +41,14 @@ def main() -> None:
 
     engine = Engine(game_map=game_map, player=player)
 
-    engine.message_log.add_message("Hello and welcome, adventurer, to yet another dungeon!", (0, 127, 255))
+    engine.message_log.add_message(
+        "It's dark... you can hear something just out of sight..", (0, 127, 255))
 
     with tcod.context.new_terminal(
         screen_width,
         screen_height,
         tileset=tileset,
-        title="Yet Another Roguelike Tutorial",
+        title="Hero Egg: The beginning!",
         vsync=True,
     ) as context:
         root_console = tcod.Console(screen_width, screen_height, order="F")

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, TYPE_CHECKING
+from typing import List, Tuple, TYPE_CHECKING
 
 from components.base_component import BaseComponent
 
@@ -12,7 +12,14 @@ if TYPE_CHECKING:
 class Inventory(BaseComponent):
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.items: List[Item] = []
+        self.items: List[Item | str] = self.init_inventory()
+
+    def init_inventory(self):
+        items = []
+        for i in range(self.capacity):
+            items.append('')
+
+        return items
 
     def add_item(self, item: Item) -> bool:
         """
@@ -20,12 +27,12 @@ class Inventory(BaseComponent):
         If the item was added, return True to represent a turn passing. If not, return False, so the player does not
         waste a turn.
         """
-        if len(self.items) >= self.capacity:
-            return False
-        else:
-            self.items.append(item)
+        for i in range(self.capacity):
+            if (isinstance(self.items[i], str)):
+                self.items[i] = (item)
+                break
 
-            return True
+        return True
 
     def drop(self, item: Item, engine: Engine):
         """
